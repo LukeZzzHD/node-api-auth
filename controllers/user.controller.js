@@ -81,32 +81,35 @@ const userController = {
 		userModel
 			.findOne({ username })
 			.then(user => {
-				bcrypt.compare(password, user.hash).then(result => {
-					if (result == true) {
-						console.log('Signin succesful!');
-						const token = jwt.sign(
-							{
-								username,
-								firstName: user.firstName,
-								lastName: user.lastName,
-								isAdmin: user.isAdmin
-							},
-							CONFIG.SECRET,
-							rememberMe ? {} : { expiresIn: '1h' }
-						);
+				bcrypt
+					.compare(password, user.password)
+					.then(result => {
+						if (result == true) {
+							console.log('Signin succesful!');
+							const token = jwt.sign(
+								{
+									username,
+									firstName: user.firstName,
+									lastName: user.lastName,
+									isAdmin: user.isAdmin
+								},
+								CONFIG.SECRET,
+								rememberMe ? {} : { expiresIn: '1h' }
+							);
 
-						return res.json({
-							ok: true,
-							message: `Sign in succesful for user ${username}`,
-							token
-						});
-					} else {
-						return res.json({
-							ok: false,
-							message: 'Invalid credentials!'
-						});
-					}
-				});
+							return res.json({
+								ok: true,
+								message: `Sign in succesful for user ${username}`,
+								token
+							});
+						} else {
+							return res.json({
+								ok: false,
+								message: 'Invalid credentials!'
+							});
+						}
+					})
+					.catch(err => console.log('Bcrypt compare failed: ' + err));
 			})
 			.catch(err => {
 				console.error(err);
@@ -117,7 +120,7 @@ const userController = {
 		const { token } = req.body;
 		jwt.verify(token, CONFIG.SECRET, (err, decoded) => {
 			if (err) {
-				console.log(err.message);
+				console.log('verify -> ' + err.message);
 				return res.json({
 					ok: false,
 					message: "User couldn't be verified, please log in!"

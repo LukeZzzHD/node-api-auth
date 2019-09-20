@@ -5,7 +5,9 @@ const Schema = mongoose.Schema;
 const salesperformanceModel = new Schema({
 	user: { type: Schema.Types.ObjectId, ref: 'User' },
 	name: { type: String }, // check if name exists!!!
-	goal: { type: Number },
+	goalWeekly: { type: Number },
+	goalMonthly: { type: Number },
+	goalYearly: { type: Number },
 	performances: [{ date: Date }]
 });
 
