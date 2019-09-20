@@ -2,6 +2,8 @@ const userModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const CONFIG = require('../config');
+const mongoose = require('mongoose');
+const salesperformanceModel = require('../models/salesperformance.model');
 
 const userController = {
 	signUp: (req, res) => {
@@ -22,10 +24,14 @@ const userController = {
 		// Validate provided username and password
 		const errors = [];
 		if (username.length < 4) {
-			errors.push({ message: 'The provided username is too short, it must be at least 4 characters long.' });
+			errors.push({
+				message: 'The provided username is too short, it must be at least 4 characters long.'
+			});
 		}
 		if (username.length > 20) {
-			errors.push({ message: 'The provided username is too long, it can only be 20 characters long.' });
+			errors.push({
+				message: 'The provided username is too long, it can only be 20 characters long.'
+			});
 		}
 		if (password !== password2) {
 			errors.push({ message: "The two passwords don't match." });
@@ -49,13 +55,19 @@ const userController = {
 				});
 
 				// Create a jwt with the usernem firstName and lastName that expires in one hour
-				const token = jwt.sign({ username, firstName, lastName, isAdmin: false }, CONFIG.SECRET, { expiresIn: '1h' });
+				const token = jwt.sign({ username, firstName, lastName, isAdmin: false }, CONFIG.SECRET, {
+					expiresIn: '1h'
+				});
 
 				// Save the user to the database
 				newUser
 					.save()
 					.then(user => {
 						console.log(JSON.stringify(user));
+
+						createSalesperformanceFields(user).then(
+							console.log('Created spo fields for user in db')
+						);
 
 						return res.json({
 							ok: true,
@@ -159,5 +171,35 @@ const userController = {
 		});
 	}
 };
+
+async function createSalesperformanceFields(user) {
+	let values = [
+		{ name: 'mobile', goalWeekly: 4, goalMonthly: 16, goalYearly: 192 },
+		{ name: 'dslandtv', goalWeekly: 7, goalMonthly: 28, goalYearly: 5416 },
+		{ name: 'accessory', goalWeekly: 1354, goalMonthly: 5416, goalYearly: 64992 },
+		{ name: 'aoit', goalWeekly: 372, goalMonthly: 1488, goalYearly: 17856 },
+		{ name: 'internetsecurity', goalWeekly: 0, goalMonthly: 0, goalYearly: 0 },
+		{ name: 'myserviceabo', goalWeekly: 0, goalMonthly: 0, goalYearly: 0 },
+		{ name: 'protectionplus', goalWeekly: 0, goalMonthly: 0, goalYearly: 0 }
+	];
+
+	values.forEach(obj => {
+		let tempModel = new salesperformanceModel({
+			user,
+			name: obj.name,
+			goalWeekly: obj.goalWeekly,
+			goalMonthly: obj.goalMonthly,
+			goalYearly: obj.goalYearly,
+			performances: []
+		});
+
+		tempModel
+			.save()
+			.then(spo => {
+				console.log(`Created spo: ${JSON.stringify(spo)}`);
+			})
+			.catch(err => console.log(err));
+	});
+}
 
 module.exports = userController;
