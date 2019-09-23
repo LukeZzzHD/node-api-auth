@@ -65,9 +65,7 @@ const userController = {
 					.then(user => {
 						console.log(JSON.stringify(user));
 
-						createSalesperformanceFields(user).then(
-							console.log('Created spo fields for user in db')
-						);
+						createSalesperformanceFields(user).then(console.log('Created spo fields for user in db'));
 
 						return res.json({
 							ok: true,

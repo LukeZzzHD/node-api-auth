@@ -15,7 +15,7 @@ const salesperformanceController = {
 		};
 		let data = { token };
 		axios
-			.post(`${CONFIG.HOST}/api/users/verify`, data, config)
+			.post(CONFIG.HOST.API.USERS.VERIFY, data, config)
 			.then(response => {
 				if (response.data.ok == true) {
 					// Token verified succesfully
@@ -54,7 +54,7 @@ const salesperformanceController = {
 									};
 									let data = { token };
 									axios
-										.post(`${CONFIG.HOST}/api/users/verifyAdmin`, data, config)
+										.post(CONFIG.HOST.API.USERS.VERIFY_ADMIN, data, config)
 										.then(response => {
 											if (response.data.ok) {
 												// User is an admin
@@ -115,7 +115,7 @@ const salesperformanceController = {
 		};
 		let data = { token };
 		axios
-			.post(`${CONFIG.HOST}/api/users/verify`, data, config)
+			.post(CONFIG.HOST.API.USERS.VERIFY, data, config)
 			.then(response => {
 				if (response.data.ok == true) {
 					// Token verified succesfully
@@ -161,7 +161,7 @@ const salesperformanceController = {
 									};
 									let data = { token };
 									axios
-										.post(`${CONFIG.HOST}/api/users/verifyAdmin`, data, config)
+										.post(CONFIG.HOST.API.USERS.VERIFY_ADMIN, data, config)
 										.then(response => {
 											if (response.data.ok) {
 												// User is an admin
@@ -228,7 +228,7 @@ const salesperformanceController = {
 		};
 		let data = { token };
 		axios
-			.post(`${CONFIG.HOST}/api/users/verify`, data, config)
+			.post(CONFIG.HOST.API.USERS.VERIFY, data, config)
 			.then(response => {
 				if (response.data.ok == true) {
 					// Token verified succesfully
@@ -276,7 +276,7 @@ const salesperformanceController = {
 		};
 		let data = { token };
 		axios
-			.post(`${CONFIG.HOST}/api/users/verify`, data, config)
+			.post(CONFIG.HOST.API.USERS.VERIFY, data, config)
 			.then(response => {
 				if (response.data.ok == true) {
 					// Token verified succesfully
@@ -324,7 +324,7 @@ const salesperformanceController = {
 		};
 		let data = { token };
 		axios
-			.post(`${CONFIG.HOST}/api/users/verify`, data, config)
+			.post(CONFIG.HOST.API.USERS.VERIFY, data, config)
 			.then(response => {
 				if (response.data.ok == true) {
 					// Token verified succesfully
